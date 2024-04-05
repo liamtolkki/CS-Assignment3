@@ -1,5 +1,5 @@
-STAY
-SOTY
-2
--1
-3
+cajoles
+compactest
+1
+-2
+4
