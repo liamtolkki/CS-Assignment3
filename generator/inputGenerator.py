@@ -48,6 +48,9 @@ def main():
         letterChangeCost = rand.randint(1,4)
         if allowNegativeCostMatch:
             matchCost = rand.randint(-2, 2)
+            test = rand.randint(0,1)
+            if test == 0:
+                matchCost = 0
         dif = matchCost - insertDeleteCost
         if dif >= 0:
             insertDeleteCost = (insertDeleteCost + dif) + 1 #make sure that match cost is LOWER than mismatch!
@@ -61,7 +64,7 @@ def main():
             file.write(randWord2 + "\n")
             file.write(str(insertDeleteCost) + "\n")
             file.write(str(matchCost) + "\n")
-            file.write(str(letterChangeCost) + "\n")
+            file.write(str(letterChangeCost))
 
             file.close()
 
