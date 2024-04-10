@@ -9,7 +9,7 @@ def weighted_random(start_index, size, max_distance):
 
 def main():
     dictionary = []
-    with open("dictionary.txt", "r") as dictionaryFile:
+    with open("cleanDictionary.txt", "r") as dictionaryFile:
         word = dictionaryFile.readline().strip()
         while (word):
             word = dictionaryFile.readline().strip()
