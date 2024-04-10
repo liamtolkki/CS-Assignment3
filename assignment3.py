@@ -5,6 +5,7 @@
 
 import re
 import sys
+
 def create_2d_array(rows, cols):
     return [[None for _ in range(cols)] for _ in range(rows)]
 # Returns a number found in the filename
@@ -14,17 +15,17 @@ def getNumber(filename):
         return 0
     number = int(''.join(digits)) #concatenate the digits together and cast to int
     return number
-def printMatrix(matrix, rows, cols):
-    isNegative = matrix[0][0] < 0
-    for i in range(rows):
-        for j in range(cols):
-            if matrix[i][j] == None:
-                if isNegative:
-                    print(" ", end="") #extra pad to account for negative - sign
+def printMatrix():
+    isNegative = costMatrix[0][0] < 0
+    for i in range(nRows):
+        for j in range(nCols):
+            if costMatrix[i][j] == None:
+                #if isNegative:
+                #    print(" ", end="") #extra pad to account for negative - sign
                 print("X", end="")
             else:
-                print(matrix[i][j], end="")
-            print(" ", end="")
+                print(costMatrix[i][j], end="")
+            print("\t", end="")
                 
         print() #newline
 
@@ -48,20 +49,26 @@ def main():
         matchCost = int(infile.readline().strip())
         mismatchCost = int(infile.readline().strip())
         infile.close()
-    #stringArray will hold the costs as it goes (2D array)
+    #declare global variables
+    global nRows
     nRows = len(string1)
+    global nCols
     nCols = len(string2)
-
-    stringArray = create_2d_array(nRows, nCols)
-    #initialize the first row and column with matchCost O(M + N):
+    #costMatrix will hold the costs as it goes (2D array)
+    global costMatrix 
+    costMatrix = create_2d_array(nRows, nCols)
+    #initialize the first row and column with gapCost * i O(M + N):
     for i in range(nCols):
-        stringArray[0][i] = matchCost 
+        costMatrix[0][i] = insertDeleteCost * i 
     for i in range(nRows):
-        stringArray[i][0] = matchCost
+        costMatrix[i][0] = insertDeleteCost * i
     print("String1: \"" + string1 + "\"")
     print("String2: \"" + string2 + "\"")
 
-    printMatrix(stringArray, nRows, nCols) #testing purposes
+    printMatrix() #testing purposes
+
+    #calculate the cell costs:
+
     
 if __name__ == "__main__":
     main()
