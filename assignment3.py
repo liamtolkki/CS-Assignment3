@@ -16,12 +16,17 @@ def getNumber(filename):
     number = int(''.join(digits)) #concatenate the digits together and cast to int
     return number
 def printMatrix():
-    isNegative = costMatrix[0][0] < 0
+    print("\t", end="")
+    for i in range(nCols - 1):
+        print(string2[i] + "\t",end="")
+    print()
     for i in range(nRows):
+        if i > 0:
+            print(string1[i - 1] + " ", end="")
+        else:
+            print("  ", end="")
         for j in range(nCols):
             if costMatrix[i][j] == None:
-                #if isNegative:
-                #    print(" ", end="") #extra pad to account for negative - sign
                 print("X", end="")
             else:
                 print(costMatrix[i][j], end="")
@@ -31,7 +36,8 @@ def printMatrix():
 
 #returns the cost of diagonal traversal
 def alpha(i, j):
-    if string1[i] == string2[j]:
+    #print("i: " + str(i) + "    j: " + str(j))
+    if string1[i - 1] == string2[j - 1]:
         return matchCost
     else:
         return mismatchCost
@@ -63,8 +69,8 @@ def main():
         mismatchCost = int(infile.readline().strip())
         infile.close()
     #initialize values
-    nRows = len(string1)
-    nCols = len(string2)
+    nRows = len(string1) + 1
+    nCols = len(string2) + 1
     #costMatrix will hold the costs as it goes (2D array)
     costMatrix = create_2d_array(nRows, nCols)
     #initialize the first row and column with gapCost * i O(M + N):
@@ -72,8 +78,8 @@ def main():
         costMatrix[0][i] = insertDeleteCost * i 
     for i in range(nRows):
         costMatrix[i][0] = insertDeleteCost * i
-    print("String1: \"" + string1 + "\"")
-    print("String2: \"" + string2 + "\"")
+    #print("String1: \"" + string1 + "\"")
+    #print("String2: \"" + string2 + "\"")
 
     #calculate the cell costs:
     #start with indexes at 1 since first row and column already filled out!
@@ -84,11 +90,71 @@ def main():
             gapRight = insertDeleteCost + costMatrix[i][j - 1]
             #minimum cost becomes the cell
             costMatrix[i][j] = min(diagonalCost, gapDown, gapRight)
+    #printMatrix() #testing purposes
+    #the bottom right value is always the minimum cost of alignment
+    minimumCost = costMatrix[nRows - 1][nCols - 1]
+    #print("Minimum Cost: " + str(minimumCost))
+    #traverse backwards:
+    string1Aligned = [] #list of chars to be soon reversed and turned into a string
+    string2Aligned = [] #same thing
+    i = nRows - 1
+    j = nCols - 1
+    while i > 0 and j > 0: #until it reaches top left
+        #find lowest adjacent cell:
+        left = float('inf') #gets overwritten if not out of bounds
+        up = float('inf')
+        diagonal = float('inf')
+        if j > 0:
+            left = costMatrix[i][j - 1]
+        if i > 0:
+            up = costMatrix[i - 1][j]
+        if i > 0 and j > 0:
+            diagonal = costMatrix[i - 1][j - 1]
+        minSelect = min(up, left, diagonal)
+        if minSelect == left:
+            #gap in string1
+            #print("i = " + str(i) + "   j = " + str(j) + "\tLEFT")
 
+            string2Aligned.append(string2[j - 1])
+            string1Aligned.append('_')
+            j = j - 1
+        elif minSelect == up:
+            #gap in string2
+            #print("i = " + str(i) + "   j = " + str(j) + "\tUP")
 
-    printMatrix() #testing purposes
-
-
+            string1Aligned.append(string1[i - 1])
+            string2Aligned.append('_')
+            i = i - 1
+        else:
+            #diagonal
+            #print("i = " + str(i) + "   j = " + str(j) + "\tDiag")
+            string1Aligned.append(string1[i - 1])
+            string2Aligned.append(string2[j - 1])
+            i = i - 1
+            j = j - 1
+    print()
+    #process character arrays:
+    #they need to be reversed and then joined
+    i = 0
+    end = len(string1Aligned) - 1
+    while i <= end:
+        temp = string1Aligned[i]
+        string1Aligned[i] = string1Aligned[end]
+        string1Aligned[end] = temp
+        i = i + 1
+        end = end - 1
+    i = 0
+    end = len(string2Aligned) - 1
+    while i <= end:
+        temp = string2Aligned[i]
+        string2Aligned[i] = string2Aligned[end]
+        string2Aligned[end] = temp
+        i = i + 1
+        end = end - 1
+    string1Aligned = "".join(string1Aligned)
+    string2Aligned = "".join(string2Aligned)
+    print("String1 Aligned: \"" + string1Aligned + "\"")
+    print("String2 Aligned: \"" + string2Aligned + "\"")
     
 if __name__ == "__main__":
     main()
