@@ -132,7 +132,6 @@ def main():
             string2Aligned.append(string2[j - 1])
             i = i - 1
             j = j - 1
-    print()
     #process character arrays:
     #they need to be reversed and then joined
     i = 0
@@ -153,8 +152,18 @@ def main():
         end = end - 1
     string1Aligned = "".join(string1Aligned)
     string2Aligned = "".join(string2Aligned)
-    print("String1 Aligned: \"" + string1Aligned + "\"")
-    print("String2 Aligned: \"" + string2Aligned + "\"")
+    #print("String1 Aligned: \"" + string1Aligned + "\"")
+    #print("String2 Aligned: \"" + string2Aligned + "\"")
+    path = "testing/"
+    file = "output.txt"
+    if fileNumber > 0:
+        file = "output" + str(fileNumber) + ".txt"
+    outPath = path + file
+    with open(outPath, "w") as outFile:
+        outFile.write(str(minimumCost) + "\n")
+        outFile.write(string1Aligned + "\n")
+        outFile.write(string2Aligned + "\n")
+        outFile.close()
     
 if __name__ == "__main__":
     main()
