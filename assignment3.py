@@ -92,7 +92,7 @@ def main():
             costMatrix[i][j] = min(diagonalCost, gapDown, gapRight)
     #printMatrix() #testing purposes
     #the bottom right value is always the minimum cost of alignment
-    minimumCost = costMatrix[nRows - 1][nCols - 1]
+    minimumCost = 0 # = costMatrix[nRows - 1][nCols - 1] 
     #print("Minimum Cost: " + str(minimumCost))
     #traverse backwards:
     string1Aligned = [] #list of chars to be soon reversed and turned into a string
@@ -118,6 +118,7 @@ def main():
             string2Aligned.append(string2[j - 1])
             string1Aligned.append('_')
             j = j - 1
+            minimumCost += insertDeleteCost #pay the gap cost
         elif minSelect == up:
             #gap in string2
             #print("i = " + str(i) + "   j = " + str(j) + "\tUP")
@@ -125,11 +126,14 @@ def main():
             string1Aligned.append(string1[i - 1])
             string2Aligned.append('_')
             i = i - 1
+            minimumCost += insertDeleteCost #pay the gap cost
+
         else:
             #diagonal
             #print("i = " + str(i) + "   j = " + str(j) + "\tDiag")
             string1Aligned.append(string1[i - 1])
             string2Aligned.append(string2[j - 1])
+            minimumCost += alpha(i, j)
             i = i - 1
             j = j - 1
     #process character arrays:
